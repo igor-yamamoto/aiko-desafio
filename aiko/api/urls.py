@@ -5,11 +5,10 @@ from api import views
 # router = routers.DefaultRouter()
 
 urlpatterns = [
-    #path('api/veiculos/', views.veiculo_list),
-    #path('api/veiculos/id:<int:pk>/', views.veiculo_detail),
-    #path('api/linhas/', views.linha_list),
-    #path('api/linhas/id:<int:pk>/', views.linha_detail),
-    path('linhasporparada/id:<int:parada_id>/', views.linhas_por_parada),
+    path('linhasveiculos/', views.veiculos_por_linha_list),
+    path('linhasveiculos/id:<int:linha_id>/', views.veiculos_por_linha_detail),
+    path('paradaslinhas/', views.linhas_por_parada_list),
+    path('paradaslinhas/id:<int:parada_id>/', views.linhas_por_parada_detail),
     path('<str:slug>/', views.operate_list),
     path('<str:slug>/id:<int:pk>/', views.operate_details),
 ]

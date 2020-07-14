@@ -6,8 +6,6 @@ def get_idx(slug):
         i = 1
     elif slug == 'paradas':
         i = 2
-    elif slug == 'paradaslinhas':
-        i = 3
     elif slug == 'posicaoveiculos':
-        i = 4
+        i = 3
     return i

@@ -5,15 +5,15 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.request import Request
 
-from .serializers import VeiculoSerializer, LinhaSerializer, ParadasSerializer, ParadasLinhaSerializer, PosicaoVeiculosSerializer, LinhasPorParadaSerializer
-from .models import Veiculo, Linha, Paradas, ParadasLinha, PosicaoVeiculos
+from .serializers import VeiculoSerializer, LinhaSerializer, ParadasSerializer,  PosicaoVeiculosSerializer, LinhasParadaSerializer, VeiculosLinhaSerializer
+from .models import Veiculo, Linha, Paradas, PosicaoVeiculos
 
 from rest_framework.decorators import api_view
 
 from .funcs import get_idx
 
-models = [Veiculo, Linha, Paradas, ParadasLinha, PosicaoVeiculos]
-serializers = [VeiculoSerializer, LinhaSerializer, ParadasSerializer, ParadasLinhaSerializer, PosicaoVeiculosSerializer]
+models = [Veiculo, Linha, Paradas, PosicaoVeiculos]
+serializers = [VeiculoSerializer, LinhaSerializer, ParadasSerializer, PosicaoVeiculosSerializer]
 name_models = ['name_veiculo', 'name_linha', 'name_parada']
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -25,7 +25,7 @@ def operate_list(request, slug):
 
     if request.method == 'GET':
         instance = model.objects.all()
-        if i in [3, 4]:
+        if i in [3]:
             instance_serializer = serializer(instance, many = True)
         else:
             name_model = name_models[i]
@@ -80,16 +80,36 @@ def operate_details(request, slug, pk):
         return JsonResponse({'message': 'Instancia deletada da base de dados'}, status = status.HTTP_204_NO_CONTENT, safe = False)
 
 @api_view(['GET'])
-def linhas_por_parada(request, parada_id):
+def linhas_por_parada_list(request):
+    parada_linha = Paradas.objects.all()
+
+    parada_linha_serializer = LinhasParadaSerializer(parada_linha, many = True)
+    return JsonResponse(parada_linha_serializer.data, safe = False, status = status.HTTP_200_OK)
+
+@api_view(['GET'])
+def linhas_por_parada_detail(request, parada_id):
     try:
-        parada_linha = ParadasLinha.objects.filter(paradas_id=parada_id)
+        parada_linha = Paradas.objects.filter(id=parada_id)
     except:
         return JsonResponse({'message': 'Parada nao existe'})
 
-    linha_id_arr = parada_linha.values('linha_id')
-    nome_linha = Linha.objects.filter(id__in = linha_id_arr)
-    print(nome_linha)
-    print(parada_linha)
-    parada_linha_serializer = LinhasPorParadaSerializer(parada_linha, many = True)
+    parada_linha_serializer = LinhasParadaSerializer(parada_linha, many = True)
     return JsonResponse(parada_linha_serializer.data, safe = False, status = status.HTTP_200_OK)
 
+
+@api_view(['GET'])
+def veiculos_por_linha_list(request):
+    linha_veiculo = Linha.objects.all()
+
+    linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many = True)
+    return JsonResponse(linha_veiculo_serializer.data, safe = False, status = status.HTTP_200_OK)
+
+@api_view(['GET'])
+def veiculos_por_linha_detail(request, linha_id):
+    try:
+        linha_veiculo = Linha.objects.filter(id=linha_id)
+    except:
+        return JsonResponse({'message': 'Linha nao existe'})
+
+    linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many = True)
+    return JsonResponse(linha_veiculo_serializer.data, safe = False, status = status.HTTP_200_OK)
