@@ -34,7 +34,6 @@ class PosicaoVeiculosSerializer(serializers.HyperlinkedModelSerializer):
         model = PosicaoVeiculos
         fields = ['id', 'lat_veiculo', 'long_veiculo', 'veiculo_id']
 
-
 class LinhasPorParadaSerializer(serializers.Serializer):
     linha_id = serializers.IntegerField()
     paradas_id = serializers.IntegerField()
@@ -42,3 +41,5 @@ class LinhasPorParadaSerializer(serializers.Serializer):
     class Meta:
         model = ParadasLinha
         fields = ['paradas_id', 'linha_id']
+
+
