@@ -10,7 +10,7 @@ from .models import Veiculo, Linha, Paradas, PosicaoVeiculos
 
 from rest_framework.decorators import api_view
 
-from .funcs import get_idx
+from .funcs import get_idx, calculate_distance
 
 models = [Veiculo, Linha, Paradas, PosicaoVeiculos]
 serializers = [VeiculoSerializer, LinhaSerializer, ParadasSerializer, PosicaoVeiculosSerializer]
@@ -51,7 +51,7 @@ def operate_list(request, slug):
         instance.delete()
         return JsonResponse({'message': 'Instancia excluida'}, status = status.HTTP_204_NO_CONTENT, safe = False)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def operate_details(request, slug, pk):
     i = get_idx(slug)
 
@@ -67,9 +67,12 @@ def operate_details(request, slug, pk):
         instance_serializer = serializer(instance)
         return JsonResponse(instance_serializer.data)
 
-    elif request.method == 'PUT':
+    elif (request.method == 'PUT' or request.method == 'PATCH'):
         instance_data = JSONParser().parse(request)
-        instance_serializer = serializer(instance, data = instance_data)
+        if request.method == 'PUT':
+            instance_serializer = serializer(instance, data = instance_data)
+        if request.method == 'PATCH':
+            instance_serializer = serializer(instance, data = instance_data, partial = True)
         if instance_serializer.is_valid():
             instance_serializer.save()
             return JsonResponse(instance_serializer.data)
@@ -86,15 +89,29 @@ def linhas_por_parada_list(request):
     parada_linha_serializer = LinhasParadaSerializer(parada_linha, many = True)
     return JsonResponse(parada_linha_serializer.data, safe = False, status = status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'PATCH'])
 def linhas_por_parada_detail(request, parada_id):
     try:
         parada_linha = Paradas.objects.filter(id=parada_id)
     except:
         return JsonResponse({'message': 'Parada nao existe'})
 
-    parada_linha_serializer = LinhasParadaSerializer(parada_linha, many = True)
-    return JsonResponse(parada_linha_serializer.data, safe = False, status = status.HTTP_200_OK)
+    if request.method == 'GET':
+        parada_linha_serializer = LinhasParadaSerializer(parada_linha, many = True)
+        return JsonResponse(parada_linha_serializer.data, safe = False, status = status.HTTP_200_OK)
+
+    elif (request.method == 'PUT' or request.method == 'PATCH'):
+        parada_linha = Paradas.objects.get(id = parada_id)
+        parada_linha_data = JSONParser().parse(request)
+        if request.method == 'PUT':
+            parada_linha_serializer = LinhasParadaSerializer(parada_linha, data = parada_linha_data)
+        elif request.method == 'PATCH':
+            parada_linha_serializer = LinhasParadaSerializer(parada_linha, data = parada_linha_data, partial = True)
+
+        if parada_linha_serializer.is_valid():
+            parada_linha_serializer.save()
+            return JsonResponse(parada_linha_serializer.data)
+        return JsonResponse(parada_linha_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -104,12 +121,56 @@ def veiculos_por_linha_list(request):
     linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many = True)
     return JsonResponse(linha_veiculo_serializer.data, safe = False, status = status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'PATCH'])
 def veiculos_por_linha_detail(request, linha_id):
     try:
         linha_veiculo = Linha.objects.filter(id=linha_id)
-    except:
+    except model.DoesNotExist:
         return JsonResponse({'message': 'Linha nao existe'})
 
-    linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many = True)
-    return JsonResponse(linha_veiculo_serializer.data, safe = False, status = status.HTTP_200_OK)
+    if request.method == 'GET':
+        linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many = True)
+        return JsonResponse(linha_veiculo_serializer.data, safe = False, status = status.HTTP_200_OK)
+
+    elif (request.method == 'PUT' or request.method == 'PATCH'):
+        linha_veiculo = Linha.objects.get(id = linha_id)
+        linha_veiculo_data = JSONParser().parse(request)
+        if request.method == 'PUT':
+            linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, data = linha_veiculo_data)
+        elif request.method == 'PATCH':
+            linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, data = linha_veiculo_data, partial = True)
+
+        if linha_veiculo_serializer.is_valid():
+            linha_veiculo_serializer.save()
+            return JsonResponse(linha_veiculo_serializer.data)
+        return JsonResponse(linha_veiculo_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def paradas_por_posicao(request, lat, lon):
+    import numpy as np
+
+    paradas = Paradas.objects.all()
+
+    ids, distances = calculate_distance(paradas, lat, lon, 3)
+
+    paradas = Paradas.objects.filter(id__in = ids)
+
+    paradas_posicao_serializer = ParadasSerializer(paradas, many = True)
+
+    return JsonResponse(paradas_posicao_serializer.data, safe = False, status = status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def paradas_por_posicao_n(request, lat, lon, n):
+    import numpy as np
+
+    paradas = Paradas.objects.all()
+
+    ids, distances = calculate_distance(paradas, lat, lon, n)
+
+    paradas = Paradas.objects.filter(id__in = ids)
+
+    paradas_posicao_serializer = ParadasSerializer(paradas, many = True)
+
+    return JsonResponse(paradas_posicao_serializer.data, safe = False, status = status.HTTP_200_OK)
