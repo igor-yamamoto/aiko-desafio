@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'aiko.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DBS = (
-    {
+    { ## Docker
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'aikodb',
@@ -100,7 +100,7 @@ DBS = (
             'PORT': '5432',
     }
     },
-    {
+    { ## Local
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'aikodb',
