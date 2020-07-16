@@ -11,6 +11,6 @@ urlpatterns = [
     path('linhasveiculos/id:<int:linha_id>/', views.veiculos_por_linha_detail),
     path('paradaslinhas/', views.linhas_por_parada_list),
     path('paradaslinhas/id:<int:parada_id>/', views.linhas_por_parada_detail),
-    path('<str:slug>/', views.operate_list),
-    path('<str:slug>/id:<int:primary_key>/', views.operate_details),
+    path('<str:modelo>/', views.operate_list),
+    path('<str:modelo>/id:<int:primary_key>/', views.operate_details),
 ]

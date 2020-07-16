@@ -58,11 +58,17 @@ serializers = [VeiculoSerializer, LinhaSerializer, ParadasSerializer, PosicaoVei
 name_models = ['name_veiculo', 'name_linha', 'name_parada']
 
 @api_view(['GET', 'POST', 'DELETE'])
-def operate_list(request, slug):
-    """Metodo para apresentar uma lista dos modelos uportados
-    (Paradas, Linhas, Veiculos e PosicaoVeiculos)"""
+def operate_list(request, modelo):
+    """Metodo para apresentar uma lista dos modelos suportados
+    (Paradas, Linhas, Veiculos e PosicaoVeiculos). Aqui, o campo
+    "modelo" deve ser preenchido com:
+        - veiculos: acesso à lista de veiculos registrados
+        - linhas: acesso à lista de linhas registradas
+        - paradas: acesso à lista de paradas registradas
+        - posicaoveiculos: acesso à lista de posição dos veiculos
+    """
 
-    i = get_idx(slug)
+    i = get_idx(modelo)
 
     if i == -1:
         return JsonResponse(
@@ -109,12 +115,18 @@ def operate_list(request, slug):
                             status=status.HTTP_204_NO_CONTENT, safe=False)
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def operate_details(request, slug, primary_key):
+def operate_details(request, modelo, primary_key):
     """Metodo apra apresentar uma instancia de cada modelo suportado
-    (Paradas, Linhas, Veiculos e PosicaoVeiculos)"""
+    (Paradas, Linhas, Veiculos e PosicaoVeiculos). Aqui, o campo
+    "modelo" deve ser preenchido com:
+        - veiculos: acesso à lista de veiculos registrados
+        - linhas: acesso à lista de linhas registradas
+        - paradas: acesso à lista de paradas registradas
+        - posicaoveiculos: acesso à lista de posição dos veiculos
 
-    i = get_idx(slug)
+    """
 
+    i = get_idx(modelo)
 
     if i == -1:
         return JsonResponse(
@@ -167,8 +179,8 @@ def linhas_por_parada_list(request):
 
 @api_view(['GET', 'PUT', 'PATCH'])
 def linhas_por_parada_detail(request, parada_id):
-    """Metodo para apresentar uma parada em especifico, e todas as
-    linhas associadas."""
+    """Metodo para apresentar uma parada em especifico, apresentando
+    também as linhas associadas."""
 
     try:
         parada_linha = Paradas.objects.filter(id=parada_id)
@@ -197,8 +209,8 @@ def linhas_por_parada_detail(request, parada_id):
 
 @api_view(['GET'])
 def veiculos_por_linha_list(request):
-    """Metodo que lista todas as linhas, apresentando tambem os
-    veiculos associados."""
+    """Metodo para listar todas as linhas, acompanhadas dos veiculos
+    associados."""
 
     linha_veiculo = Linha.objects.all()
 
@@ -207,8 +219,8 @@ def veiculos_por_linha_list(request):
 
 @api_view(['GET', 'PUT', 'PATCH'])
 def veiculos_por_linha_detail(request, linha_id):
-    """Metodo que apresenta isntancias das linhas, apresentando tambem
-    os veiculos associados."""
+    """Metodo para apresentar uma linha em especifico, apresentando
+    também os veiculos associados."""
 
     try:
         linha_veiculo = Linha.objects.filter(id=linha_id)

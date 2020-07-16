@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'api.apps.ApiConfig' ,
     'rest_framework' ,
+    'drf_yasg' ,
     'corsheaders' ,
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS':
+        'rest_framework.schemas.coreapi.AutoSchema'
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

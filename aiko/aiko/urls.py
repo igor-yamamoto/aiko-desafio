@@ -16,7 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework.schemas import get_schema_view
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title = 'Aiko API',
+        default_version='v1',
+        description="""API desenvolvida como desafio proposto no processo seletivo de estágio da Aiko.""",
+        contact=openapi.Contact(email='igorhc.yamamoto@gmail.com')
+        ),
+    public=True
+    )
+
 urlpatterns = [
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-doc'),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
