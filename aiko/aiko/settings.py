@@ -89,17 +89,30 @@ WSGI_APPLICATION = 'aiko.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aikodb',
-        'USER': 'igor',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+DBS = (
+    {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'aikodb',
+            'USER': 'igor',
+            'PASSWORD': '123',
+            'HOST': 'db',
+            'PORT': '5432',
     }
-}
+    },
+    {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'aikodb',
+            'USER': 'igor',
+            'PASSWORD': '123',
+            'HOST': 'localhost',
+            'PORT': '5432',
+    }
+    },
+)
 
+DATABASES = DBS[1]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

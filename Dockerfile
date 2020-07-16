@@ -1,15 +1,10 @@
-FROM ubuntu:18.04
-
-RUN apt-get update && \
-	apt-get install -y build-essential \
-	python3 \
-	python3-dev \
-	python3-pip 
+FROM python:3
+ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
 WORKDIR /code
 
-COPY . /code/
-
+COPY requirements.txt /code/
 RUN pip3 install -r requirements.txt
 
+COPY . /code/
