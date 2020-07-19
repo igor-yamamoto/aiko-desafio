@@ -1,4 +1,4 @@
-"""Arquivo one sao definidos os modelos (tabelas do banco de dados)
+"""Arquivo onde são definidos os modelos (tabelas do banco de dados)
 a serem implementados na API."""
 
 from django.db import models

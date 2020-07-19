@@ -9,7 +9,7 @@ Este projeto foi desenvolvido utilizando as ferramentas do pacote Django e Djang
 
 Para fazer uso da API:
 * Clone este repositório à sua máquina
-* Acesse o diretório através do comando `cd teste/back-end/igor`
+* Acesse o diretório da aplicação através do comando `cd teste/back-end/igor/`
 * Inicie um ambiente virtual e instale as dependências com o comando `pip3 install -r requirements.txt`
 * Acesse o diretório da aplicação por meio do comando `cd aiko`
 * No arquivo `aiko/settings.py`, configure as informações de usuários PostgreSQL. Nele, devem ser substituidos os campos `'USER'` e `'PASSWORD''` pelo usuário e senha, respectivamente 
@@ -32,24 +32,19 @@ A API consiste de quatro tabelas. São elas:
 * **Veiculos**: Relação de todas os veiculos registrados no sistema. Consiste de um id (`id`: `primary key - long`), nome (`name_veiculo`: `char(30)`), modelo (`model_veiculo`: `char(30)`) e uma chave externa das linhas registradas (`foreign key - many to one`).
 * **Posição dos veiculos**: Relação da posição de todos os veiculos registrados no sistema. Consiste de latitude (`lat_veiculo`: `bigint`), longitude (`long_veiculo`: `bigint`) e uma chave externa dos veiculos registrados, que também serve de chave primária (`foreign key - one to one`).
 
-Ao rodar o servidor e acessar o endereço [localhost:8000/](http://localhost:8000/), o usuário é apresentado ao template de inicialização do Swagger. Nesta página, é possível realizar diversas operações, como `GET`, `POST`, `PUT` e `DELETE`. Também, é possível realizar a operação de `PATCH` em algumas tabelas.
+Ao rodar o servidor e acessar o endereço [localhost:8000/](http://localhost:8000/), o usuário é apresentado ao template de inicialização do Swagger. Nesta página, é possível realizar diversas operações, como `GET`, `POST`, `PUT` e `DELETE`. Também, é possível realizar a operação de `PATCH` em algumas tabelas. Maiores informações sobre as url's são apresentadas [neste arquivo](descr-url.md).
 
-Os métodos principais são `/api/{modelo}` e `/api/{modelo}/id:{primary_key}/`. Nos campos entre chaves (`{ }`) devem ser substituidos strings que conferem o acesso a cada uma das tabelas apresentadas acima. A relação completa de url's é:
-* [/api/veiculos/](http://localhost:8000/api/veiculos/): url associada à tabela de veiculos. 
-* [/api/linhas/](http://localhost:8000/api/linhas/): url associada à tabela de linhas. 
-* [/api/paradas/](http://localhost:8000/api/paradas/): url associada à tabela de paradas. 
-* [/api/posicaoveiculos/](http://localhost:8000/api/posicaoveiculos/): url associada à tabela de posição dos veiculos. 
-	* Todas as url's acima suportam as operações de `GET` (lista todas as insâncias da tabela), `POST` (insere novas instâncias na base de dados), `DELETE` (deleta todas as instancias da tabela)
+## Link do de acesso ao vídeo de desenvolvimento
+O vídeo onde falo um pouco sobre o desenvolvimento, as decisões, tecnologias, arquitetura e demais pontos pode ser acessado por [este link](link).
 
-Se qualquer uma das url's descritas acima forem acompanhadas de um `id`, é possível fazer uma das operações dentre `GET`, `PUT`, `PATCH` e `DELETE`. Por exemplo, a operação de `GET` sobre `/api/veiculos/id:1/` retorna a instância contida na tabela `api_veiculo` descrita pelo `id` igual a 1.
+## Modificações
+Qualquer recomendação, bug report ou modificações são bem vindas!
 
-A API também conta com três outros métodos além dos que já foram descritos. Estes são:
-* [/api/paradaslinhas/](http://localhost:8000/api/paradaslinhas/): url que provê acesso às paradas, acompanhadas de todas as linhas associadas.
-* [/api/linhasveiculos/](http://localhost:8000/api/linhasveiculos/): url que provê acesso às linhas, acompanhadas de todas os veiculos associados.
-	* As duas url's acima suportam a operação 'GET' (listagem de todas as instnâcias)
-	* O acesso à instâncias específicas pode ser feito pelas urls `/api/paradaslinhas/id:{parada_id}/` ou `/api/linhasveiculos/id:{linha_id}`. Estes métodos suportam as operações `GET` (acesso à isntância), `PUT` (atualização de toda a instância) e `PATCH` (atualização apenas de campos específicos)
-* `/api/paradasposicao/{lat}:{lon}/`: url que retorna as três paradas mais próximas às coordenadas passadas
-	* Caso deseje-se acessar as `N` paradas mais próximas às coordenadas, utiliza-se a url `/api/paradasposicao/{lat}:{lon}/n:{n_paradas}`
+Caso queira modificar o programa:
+* A configuração das tabelas é feita por meio do arquivo `/aiko/api/models.py`
+* A serialização dos dados é definida no arquivo `/aiko/api/serializers.py`
+* Os métodos e operações são definidos em `/aiko/api/views.py`
+* As url's de acesso são definidas em `/aiko/api/urls.py`
+* Funções complementares são definidas no arquivo `/aiko/api/funcs.py`
 
-
-
+:dragon_face: *code on!* :dragon_face:

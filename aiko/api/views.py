@@ -1,40 +1,40 @@
-"""Arquivo onde sao definidas as views (metodos) para acesso dos dados
+"""Arquivo onde sao definidas as views (métodos) para acesso dos dados
 contidos nas tabelas. Eles sao distribuidos dentre os 4 metodos pedido
-pelo desafio (POST, GET, PUT e DELETE), alem de um adicional para
-insercao de dados em campos sem ter que atualizar toda a isntancia
+pelo desafio (POST, GET, PUT e DELETE), além de um adicional para
+inserção de dados em campos sem ter que atualizar toda a instância
 (PATCH).
-Os metodos definidos aqui sao:
+Os métodos definidos aqui são:
 
-    - operate_list: metodo que suporta operacoes de POST, GET e DELETE
-        para TODAS as instancias de um dado modelo. Dentre os modelos:
+    - operate_list: método que suporta operações de POST, GET e DELETE
+        para TODAS as instâncias de um dado modelo. Dentre os modelos:
         Veiculos, Linha, Paradas, PosicaoVeiculos.
 
-    - operate_details: metodo que suporta operacoes de PUT, GET, PATCH
-        e DELETE sobre uma instancia de um dado modelo quando fornecido
-        o id (pk). Os modelos sao os mesmos para o caso da `operate_list`.
+    - operate_details: método que suporta operacoes de PUT, GET, PATCH
+        e DELETE sobre uma instância de um dado modelo quando fornecido
+        o id (pk). Os modelos são os mesmos para o caso da `operate_list`.
 
-    - linhas_por_parada_list: metodo que suporta apenas a operacao GET.
-        Ela retorna a lista de todas as paradas, apresentando nelas tambem
+    - linhas_por_parada_list: método que suporta apenas a operação GET.
+        Ela retorna a lista de todas as paradas, apresentando nelas também
         uma lista contento todas as linhas associadas as paradas.
 
-    - linhas_por_parada_detail: metodo que suporta as operacoes GET, PUT
-        e PATCH. Retorna, quando fornecido o id de uma parada, a instancia
-        de uma parada, contendo tambem uma lista com as linhas associadas.
+    - linhas_por_parada_detail: método que suporta as operacoes GET, PUT
+        e PATCH. Retorna, quando fornecido o id de uma parada, a instância
+        de uma parada, contendo também uma lista com as linhas associadas.
 
-    - veiculos_por_linha_list: metodo que suporta apenas operacoes GET.
-        Retorna a lista de todas as linhas, apresentando nelas tambem
+    - veiculos_por_linha_list: método que suporta apenas operações GET.
+        Retorna a lista de todas as linhas, apresentando nelas também
         uma lista de todos os veiculos associados a cada linha.
 
-    - veiculos_por_linha_detail: metodo que suporta as operacoes GET, PUT
-        e PATCH. Retorna, quando fornecido o id de uma linha, a isntancia
-        da linha, contendo tambem uma lista com os veiculos associados.
+    - veiculos_por_linha_detail: método que suporta as operações GET, PUT
+        e PATCH. Retorna, quando fornecido o id de uma linha, a instância
+        da linha, contendo também uma lista com os veiculos associados.
 
-    - paradas_por_posicao: metodo que suporta apenas a operacao GET.
-        Retorna as tres paradas mais proximas da latitude e longitude
+    - paradas_por_posicao: método que suporta apenas a operação GET.
+        Retorna as três paradas mais próximas da latitude e longitude
         fornecidas como entrada.
 
-    - paradas_por_posicao_n: metodo que suporta apenas a operacao GET.
-        Retorna as N paradas mais proximas da latitude e longitude
+    - paradas_por_posicao_n: método que suporta apenas a operacao GET.
+        Retorna as N paradas mais próximas da latitude e longitude
         fornecidas como entrada.
 
 """
@@ -59,7 +59,7 @@ name_models = ['name_veiculo', 'name_linha', 'name_parada']
 
 @api_view(['GET', 'POST', 'DELETE'])
 def operate_list(request, modelo):
-    """Metodo para apresentar uma lista dos modelos suportados
+    """Método para apresentar uma lista dos modelos suportados
     (Paradas, Linhas, Veiculos e PosicaoVeiculos). Aqui, o campo
     "modelo" deve ser preenchido com:
         - veiculos: acesso à lista de veiculos registrados
@@ -72,14 +72,14 @@ def operate_list(request, modelo):
 
     if i == -1:
         return JsonResponse(
-            {'message': 'url nao existe dentro da API. Favor, inserir uma dentre as urls possiveis',
+            {'message': 'url não existe dentro da API. Favor, inserir uma dentre as urls possíveis',
              'urls': {'Veiculos': '/api/veiculos/',
                       'Linhas': '/api/linhas/',
                       'Paradas': '/api/paradas/',
                       'Posicao dos veiculos': '/api/posicaoveiculos/',
                       'Relacao de linhas por parada': '/api/paradaslinhas/',
                       'Relacao de veiculos por linhas':'/api/linhasveiculos/',
-                      'Posicao das paradas proximas': '/api/linhasveiculos/'}
+                      'Posicao das paradas proximas': '/api/paradasposicao/'}
             })
 
     model = models[i]
@@ -111,12 +111,12 @@ def operate_list(request, modelo):
     if request.method == 'DELETE':
         instance = model.objects.all()
         instance.delete()
-        return JsonResponse({'message': 'Instancia excluida'},
+        return JsonResponse({'message': 'Instância excluida'},
                             status=status.HTTP_204_NO_CONTENT, safe=False)
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def operate_details(request, modelo, primary_key):
-    """Metodo apra apresentar uma instancia de cada modelo suportado
+    """Método apra apresentar uma instância de cada modelo suportado
     (Paradas, Linhas, Veiculos e PosicaoVeiculos). Aqui, o campo
     "modelo" deve ser preenchido com:
         - veiculos: acesso à lista de veiculos registrados
@@ -130,7 +130,7 @@ def operate_details(request, modelo, primary_key):
 
     if i == -1:
         return JsonResponse(
-            {'message': 'url nao existe dentro da API. Favor, inserir uma dentre as urls possiveis',
+            {'message': 'url não existe dentro da API. Favor, inserir uma dentre as urls possiveis',
              'urls': {'Veiculos': '/api/veiculos/id:{}'.format(primary_key),
                       'Linhas': '/api/linhas/id:{}'.format(primary_key),
                       'Paradas': '/api/paradas/id:{}'.format(primary_key),
@@ -145,7 +145,7 @@ def operate_details(request, modelo, primary_key):
     try:
         instance = model.objects.get(pk=primary_key)
     except model.DoesNotExist:
-        return JsonResponse({'message': 'Instancia nao existe'})
+        return JsonResponse({'message': 'Instância nao existe'})
 
     if request.method == 'GET':
         instance_serializer = serializer(instance)
@@ -164,12 +164,12 @@ def operate_details(request, modelo, primary_key):
 
     if request.method == 'DELETE':
         instance.delete()
-        return JsonResponse({'message': 'Instancia deletada da base de dados'},
+        return JsonResponse({'message': 'Instância deletada da base de dados'},
                             status=status.HTTP_204_NO_CONTENT, safe=False)
 
 @api_view(['GET'])
 def linhas_por_parada_list(request):
-    """Metodo para listar todas as paradas, acompanhadas das linhas
+    """Método para listar todas as paradas, acompanhadas das linhas
     associadas."""
 
     parada_linha = Paradas.objects.all()
@@ -179,13 +179,13 @@ def linhas_por_parada_list(request):
 
 @api_view(['GET', 'PUT', 'PATCH'])
 def linhas_por_parada_detail(request, parada_id):
-    """Metodo para apresentar uma parada em especifico, apresentando
+    """Método para apresentar uma parada em específico, apresentando
     também as linhas associadas."""
 
     try:
         parada_linha = Paradas.objects.filter(id=parada_id)
     except models.DoesNotExist:
-        return JsonResponse({'message': 'Parada nao existe'})
+        return JsonResponse({'message': 'Parada não existe'})
 
     if request.method == 'GET':
         parada_linha_serializer = LinhasParadaSerializer(parada_linha, many=True)
@@ -209,7 +209,7 @@ def linhas_por_parada_detail(request, parada_id):
 
 @api_view(['GET'])
 def veiculos_por_linha_list(request):
-    """Metodo para listar todas as linhas, acompanhadas dos veiculos
+    """Método para listar todas as linhas, acompanhadas dos veiculos
     associados."""
 
     linha_veiculo = Linha.objects.all()
@@ -219,13 +219,13 @@ def veiculos_por_linha_list(request):
 
 @api_view(['GET', 'PUT', 'PATCH'])
 def veiculos_por_linha_detail(request, linha_id):
-    """Metodo para apresentar uma linha em especifico, apresentando
+    """Método para apresentar uma linha em específico, apresentando
     também os veiculos associados."""
 
     try:
         linha_veiculo = Linha.objects.filter(id=linha_id)
     except models.DoesNotExist:
-        return JsonResponse({'message': 'Linha nao existe'})
+        return JsonResponse({'message': 'Linha não existe'})
 
     if request.method == 'GET':
         linha_veiculo_serializer = VeiculosLinhaSerializer(linha_veiculo, many=True)
@@ -249,7 +249,7 @@ def veiculos_por_linha_detail(request, linha_id):
 
 @api_view(['GET'])
 def paradas_por_posicao(request, lat, lon):
-    """Metodo que retorna as tres paradas mais proximas, dadas as
+    """Método que retorna as três paradas mais próximas, dadas as
     latitudes e longitudes."""
 
     lat, lon = int(lat), int(lon)
@@ -268,12 +268,12 @@ def paradas_por_posicao(request, lat, lon):
 
 @api_view(['GET'])
 def paradas_por_posicao_n(request, lat, lon, n_paradas):
-    """Metodo que retorna as N paradas mais proximas, dada a
+    """Método que retorna as N paradas mais próximas, dada a
     latitude e longitude."""
 
     paradas = Paradas.objects.all()
 
-    ids = calculate_distance(paradas, lat, lon, n_paradas)
+    ids, distances = calculate_distance(paradas, lat, lon, n_paradas)
 
     paradas = Paradas.objects.filter(id__in=ids)
 

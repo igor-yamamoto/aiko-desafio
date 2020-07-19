@@ -1,7 +1,7 @@
 """Arquivo contendo os serializadores a serem implementados na API.
-Alguns deles possuem a versao simplificada, que e para serem passa-
+Alguns deles possuem a versão simplificada, que é para serem passa-
 dos a outros serializadores, com o objetivo de nao apresentar redun
-dancia na serializacao dos dados (os mesmos dados poderem ser acessa
+dância na serialização dos dados (os mesmos dados poderem ser acessa
 dos em diversos url's diferentes). Os campos marcados com asterisco
 (*) sao listas.
 
@@ -54,7 +54,7 @@ from rest_framework import serializers
 from .models import Veiculo, Linha, Paradas, PosicaoVeiculos
 
 class PosicaoVeiculosSerializer(serializers.ModelSerializer):
-    """Serializador da posicao dos veiculos."""
+    """Serializador da posição dos veiculos."""
 
     veiculo_id = serializers.IntegerField()
 
@@ -65,7 +65,7 @@ class PosicaoVeiculosSerializer(serializers.ModelSerializer):
         fields = ['lat_veiculo', 'long_veiculo', 'veiculo_id']
 
 class PosicaoVeiculosSimplesSerializer(serializers.ModelSerializer):
-    """Serializador simplificado da posicao dos veiculos."""
+    """Serializador simplificado da posição dos veiculos."""
 
     class Meta:
         """Classe Meta para o serializador simplificado de
@@ -99,7 +99,7 @@ class VeiculoSimplesSerializer(serializers.ModelSerializer):
         fields = ['id', 'name_veiculo', 'model_veiculo']
 
 class VeiculosLinhaSerializer(serializers.ModelSerializer):
-    """Serializador da relacao de veiculos por linhas."""
+    """Serializador da relação de veiculos por linhas."""
 
     veiculos = VeiculoSimplesSerializer(many=True, read_only=True)
 
@@ -146,12 +146,12 @@ class ParadasSerializer(serializers.ModelSerializer):
         fields = ['id', 'name_parada', 'lat_parada', 'long_parada']
 
 class LinhasParadaSerializer(serializers.ModelSerializer):
-    """Serializador da relacao de linhas por paradas."""
+    """Serializador da relação de linhas por paradas."""
 
     linhas = LinhaSimplesSerializer(many=True, read_only=True)
 
     class Meta:
-        """Classe Meta para o serializador da relacao de linhas
+        """Classe Meta para o serializador da relação de linhas
         por paradas."""
 
         ordering = ['id']
