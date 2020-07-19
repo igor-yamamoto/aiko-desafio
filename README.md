@@ -35,7 +35,7 @@ A API consiste de quatro tabelas. São elas:
 Ao rodar o servidor e acessar o endereço [localhost:8000/](http://localhost:8000/), o usuário é apresentado ao template de inicialização do Swagger. Nesta página, é possível realizar diversas operações, como `GET`, `POST`, `PUT` e `DELETE`. Também, é possível realizar a operação de `PATCH` em algumas tabelas. Maiores informações sobre as url's são apresentadas [neste arquivo](descr-url.md).
 
 ## Link do de acesso ao vídeo de desenvolvimento
-O vídeo onde falo um pouco sobre o desenvolvimento, as decisões, tecnologias, arquitetura e demais pontos pode ser acessado por [este link](link).
+O vídeo onde falo um pouco sobre o desenvolvimento, as decisões, tecnologias, arquitetura e demais pontos, pode ser acessado por [este link](https://youtu.be/Bf71Z6gM5To).
 
 ## Modificações
 Qualquer recomendação, bug report ou modificações são bem vindas!
